@@ -10,17 +10,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import * as jwt from 'jsonwebtoken';
 import * as argon2 from 'argon2';
 import * as _interface from './interface';
 import { CreateUserDto } from './interface';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  private readonly jwtSecret = 'YOUR_SUPER_SECRET_KEY';
-  private readonly refreshSecret = 'YOUR_REFRESH_SECRET';
-
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService, private authService: AuthService) {}
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
@@ -42,10 +39,8 @@ export class AuthController {
       email: user.email,
     };
 
-    const token = jwt.sign(payload, this.jwtSecret, { expiresIn: '1h' });
-    const refreshToken = jwt.sign({ sub: user.id }, this.refreshSecret, {
-      expiresIn: '7d',
-    });
+    const token = this.authService.generateToken(payload);
+    const refreshToken = this.authService.generateRefreshToken(payload);
 
     return {
       access_token: token,

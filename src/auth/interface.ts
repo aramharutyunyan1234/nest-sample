@@ -13,3 +13,9 @@ export interface CreateUserDto {
   password: string;
   userName: string;
 }
+
+export interface JWTPayload {
+  sub: number;
+  username: string;
+  email: string;
+}
