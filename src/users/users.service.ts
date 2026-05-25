@@ -25,9 +25,9 @@ export class UsersService {
   async create(dto: CreateUserDto): Promise<CreateUserDto | null> {
     console.log(dto);
     const users = await this.dataSource.query(
-      `INSERT INTO "user" (name, email, password, username)
-       VALUES ($1, $2, $3, $4) RETURNING *;`,
-      [dto.name, dto.email, dto.password, dto.userName],
+      `INSERT INTO "user" (name, email, password, username, roles)
+       VALUES ($1, $2, $3, $4, $5) RETURNING *;`,
+      [dto.name, dto.email, dto.password, dto.userName, dto.role],
     );
     return users && users.length > 0 ? users[0] : null;
   }

@@ -4,6 +4,7 @@ export interface LoginResponse {
   user: {
     id: number;
     username: string;
+    role: string;
   };
 }
 
@@ -12,6 +13,7 @@ export interface CreateUserDto {
   email: string;
   password: string;
   userName: string;
+  role?: string;
 }
 
 export interface JWTPayload {

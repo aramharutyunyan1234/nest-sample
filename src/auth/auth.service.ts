@@ -12,7 +12,6 @@ export class AuthService {
     return jwt.sign(payload, this.jwtSecret, { expiresIn: '1h' });
   }
   generateRefreshToken(payload: JWTPayload): string {
-    // return jwt.sign({ sub: userId, username }, this.jwtSecret, { expiresIn: '7d' });
     return jwt.sign(payload, this.refreshSecret, { expiresIn: '7d' });
   }
 

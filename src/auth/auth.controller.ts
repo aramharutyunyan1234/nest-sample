@@ -14,6 +14,7 @@ import * as argon2 from 'argon2';
 import * as _interface from './interface';
 import { CreateUserDto } from './interface';
 import { AuthService } from './auth.service';
+import { Role } from '../common/decorators/roles.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -37,6 +38,7 @@ export class AuthController {
       sub: user.id,
       username: user.username,
       email: user.email,
+      role: Role.User,
     };
 
     const token = this.authService.generateToken(payload);
@@ -48,6 +50,7 @@ export class AuthController {
       user: {
         id: user.id,
         username: user.username,
+        role: user.roles,
       },
     };
   }
@@ -59,6 +62,9 @@ export class AuthController {
   async register(
     @Body() dto: _interface.CreateUserDto,
   ): Promise<CreateUserDto | null> {
+    dto.role = Role.User;
+    dto.password = await argon2.hash(dto.password);
+
     return this.usersService.create(dto);
   }
 }

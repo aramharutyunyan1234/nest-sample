@@ -11,7 +11,8 @@ export class AuthGuard implements CanActivate {
     if (!authHeader) {
       return false;
     }
-    const token = authHeader.split(' ')[1];
-    return !!this.authService.verifyToken(token);
+    const cleanToken: string = authHeader.replace('Bearer ', '');
+    const payload = this.authService.verifyToken(cleanToken);
+    return !!payload;
   }
 }

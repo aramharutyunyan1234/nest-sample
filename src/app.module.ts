@@ -7,9 +7,10 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from '../configs/configuration';
 import { AuthModule } from './auth/auth.module';
+import { CatsController } from './cats/cats.controller';
 
 @Module({
-  controllers: [AppController],
+  controllers: [AppController, CatsController],
   providers: [AppService],
   imports: [
     UsersModule,
