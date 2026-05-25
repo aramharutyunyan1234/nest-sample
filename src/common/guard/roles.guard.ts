@@ -23,13 +23,13 @@ export class RolesGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
-    const authHeader = request.headers.authorization;
+    const authHeader: string = request.headers.authorization;
 
     if (!authHeader) {
       return false;
     }
 
-    const cleanToken = authHeader.replace('Bearer ', '');
+    const cleanToken: string = authHeader.replace('Bearer ', '');
     const payload = this.authService.verifyToken(cleanToken);
     console.log(payload);
     console.log(requiredRoles);
