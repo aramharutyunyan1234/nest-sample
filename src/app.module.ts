@@ -8,12 +8,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from '../configs/configuration';
 import { AuthModule } from './auth/auth.module';
 import { CatsController } from './cats/cats.controller';
+import { JobsModule } from './jobs/jobs.module';
 
 @Module({
   controllers: [AppController, CatsController],
   providers: [AppService],
   imports: [
-    UsersModule,
     ConfigModule.forRoot({
       load: [configuration],
       isGlobal: true, // Makes ConfigModule available everywhere without re-importing
@@ -35,6 +35,7 @@ import { CatsController } from './cats/cats.controller';
     }),
     UsersModule,
     AuthModule,
+    JobsModule,
   ],
 })
 export class AppModule {
