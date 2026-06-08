@@ -9,6 +9,9 @@ import configuration from '../configs/configuration';
 import { AuthModule } from './auth/auth.module';
 import { CatsController } from './cats/cats.controller';
 import { JobsModule } from './jobs/jobs.module';
+import { OrdersController } from './orders/orders.controller';
+import { OrdersService } from './orders/orders.service';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   controllers: [AppController, CatsController],
@@ -36,6 +39,7 @@ import { JobsModule } from './jobs/jobs.module';
     UsersModule,
     AuthModule,
     JobsModule,
+    OrdersModule,
   ],
 })
 export class AppModule {

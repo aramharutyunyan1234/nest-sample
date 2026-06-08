@@ -9,6 +9,8 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migration:run": "npx typeorm-ts-node-commonjs migration:run -d src/db/data-source.ts",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
