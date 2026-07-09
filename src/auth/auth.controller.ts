@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Post,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as argon2 from 'argon2';
@@ -15,8 +16,11 @@ import * as _interface from './interface';
 import { CreateUserDto } from './interface';
 import { AuthService } from './auth.service';
 import { Role } from '../common/decorators/roles.enum';
+import { RolesGuard } from '../common/guard/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
 
 @Controller('auth')
+@UseGuards(RolesGuard)
 export class AuthController {
   constructor(private usersService: UsersService, private authService: AuthService) {}
 
@@ -38,7 +42,7 @@ export class AuthController {
       sub: user.id,
       username: user.username,
       email: user.email,
-      role: Role.User,
+      role: user.roles,
     };
 
     const token = this.authService.generateToken(payload);
@@ -59,6 +63,7 @@ export class AuthController {
   async findOne(@Param('id', ParseIntPipe) id: number) {}
 
   @Post('register')
+  @Roles(Role.Admin)
   async register(
     @Body() dto: _interface.CreateUserDto,
   ): Promise<CreateUserDto | null> {

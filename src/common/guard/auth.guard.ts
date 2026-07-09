@@ -13,6 +13,7 @@ export class AuthGuard implements CanActivate {
     }
     const cleanToken: string = authHeader.replace('Bearer ', '');
     const payload = this.authService.verifyToken(cleanToken);
+    request['user'] = payload;
     return !!payload;
   }
 }

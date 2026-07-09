@@ -9,12 +9,22 @@ import configuration from '../configs/configuration';
 import { AuthModule } from './auth/auth.module';
 import { CatsController } from './cats/cats.controller';
 import { JobsModule } from './jobs/jobs.module';
-import { OrdersController } from './orders/orders.controller';
-import { OrdersService } from './orders/orders.service';
 import { OrdersModule } from './orders/orders.module';
+import { AdminController } from './admin/admin.controller';
+import { UploadFilesController } from './upload-files/upload-files.controller';
+import { FilesModule } from './upload-files/files.module';
+import { OrderController } from './order/order.controller';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  controllers: [AppController, CatsController],
+  controllers: [
+    AppController,
+    CatsController,
+    AdminController,
+    UploadFilesController,
+    OrderController,
+  ],
   providers: [AppService],
   imports: [
     ConfigModule.forRoot({
@@ -36,10 +46,17 @@ import { OrdersModule } from './orders/orders.module';
         synchronize: true, // Quick note: usually keep this false in production!
       }),
     }),
+    ServeStaticModule.forRoot({
+      // Path to the physical folder on your machine
+      rootPath: join(process.cwd(), 'assets', 'uploads'),
+      // The URL prefix you want to use (e.g., localhost:3000/uploads/...)
+      serveRoot: '/assets',
+    }),
     UsersModule,
     AuthModule,
     JobsModule,
     OrdersModule,
+    FilesModule,
   ],
 })
 export class AppModule {

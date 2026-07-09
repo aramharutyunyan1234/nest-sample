@@ -3,7 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  JoinColumn, CreateDateColumn, ManyToMany, JoinTable,
+  JoinColumn,
+  CreateDateColumn,
+  ManyToMany,
 } from 'typeorm';
 import { Users } from '../users/users.entity';
 
@@ -19,8 +21,13 @@ export class OrdersStatus {
 export class OrdersType {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column()
   name: string;
+
+  // Add this block to complete the ManyToMany bridge:
+  @ManyToMany(() => Orders, (orders) => orders.types)
+  orders: Orders[];
 }
 
 @Entity('orders')
@@ -28,23 +35,28 @@ export class Orders {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  orderCreator: number;
-  @ManyToOne(() => Users, { onDelete: 'CASCADE' })
+  @Column({ nullable: true })
+  orderCreator: number | null;
+
+  // 2. Added nullable: true to the relation options
+  @ManyToOne(() => Users, { onDelete: 'SET NULL', nullable: true })
   @JoinColumn({ name: 'orderCreator' })
-  creators: Users;
+  creators: Users | null;
 
   @Column()
-  firstPrise: number;
+  firstPrice: number;
 
-  @Column()
-  orderWorker: number;
-  @ManyToOne(() => Users, { onDelete: 'CASCADE' })
+  // 3. Made the primitive column nullable
+  @Column({ nullable: true })
+  orderWorker: number | null;
+
+  // 4. Added nullable: true to the relation options
+  @ManyToOne(() => Users, { onDelete: 'SET NULL', nullable: true })
   @JoinColumn({ name: 'orderWorker' })
-  workers: Users;
+  workers: Users | null;
 
   @Column()
-  lastPrise: number;
+  lastPrice: number;
 
   @Column()
   materialPrice: string;
@@ -55,14 +67,8 @@ export class Orders {
   @Column({ type: 'text' })
   description: string;
 
-  @Column('int', { array: true, nullable: true })
-  @ManyToMany(() => OrdersType, { onDelete: 'CASCADE' })
-  @JoinTable({
-    name: 'entity_orders_types', // Name of the junction table that TypeORM will create
-    joinColumn: { name: 'entityId', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'ordersTypeId', referencedColumnName: 'id' },
-  })
-  types: OrdersType[];
+  @Column('int', { array: true, default: '{}' })
+  types: number[];
 
   @Column()
   orderStatus: number;
